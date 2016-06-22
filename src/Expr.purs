@@ -17,14 +17,9 @@ eval (Prefix _) ""      = false
         | x /= y    = false
         | otherwise = eval (Prefix xs) ys 
 -}
-eval (Prefix xxs) yys   =
-    case uncons xxs of
-        Nothing -> false
-        Just { head:x, tail:xs } ->
-            | x /= y    = false
-            | otherwise = eval (Prefix xs) ys
-    where
-        { y:Char, ys:String } = case uncons yys of
-            Nothing  -> { '\0', "" }
-            Just yys -> yys
 
+eval (Prefix s1) s2 = case uncons s1, uncons s2 of
+    Just { head: c1, tail: cs1 }, Just { head: c2, tail: cs2 }
+      | c1 == c2  -> eval (Prefix cs1) cs2
+      | otherwise -> false
+    _, _ -> false
