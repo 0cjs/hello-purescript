@@ -1,3 +1,6 @@
+# Until new version of psc/i/etc. stops dropping turds
+*.tix
+
 /bower_components/
 /node_modules/
 /.pulp-cache/
