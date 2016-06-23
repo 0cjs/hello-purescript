@@ -1,6 +1,7 @@
 module Test.Expr where
 
-import Prelude
+import Prelude (($), bind)
+import Prelude as P
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE)
 
@@ -9,10 +10,10 @@ import Test.Unit.Console (TESTOUTPUT)
 import Test.Unit (suite, test)
 import Test.Unit.Assert as Assert
 
-import Expr (Expr(..), eval, isPrefixOf)
+import Expr
 
 main :: forall t1.
-    Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) Unit
+    Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) P.Unit
 main = runTest do
     suite "eval" do
         test "equal"        $ is   $ eval (Equal "abc") "abc"
