@@ -9,7 +9,7 @@ import Test.Unit.Console (TESTOUTPUT)
 import Test.Unit (suite, test)
 import Test.Unit.Assert as Assert
 
-import Expr
+import Expr (Expr(..), eval)
 
 main :: forall t1.
     Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) Unit
