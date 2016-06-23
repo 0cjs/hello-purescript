@@ -1,4 +1,6 @@
-module Expr where
+module Expr (
+    Expr(..), eval
+) where
 
 import Prelude
 import Data.String (uncons)
