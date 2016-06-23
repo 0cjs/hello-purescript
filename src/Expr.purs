@@ -3,7 +3,7 @@ module Expr (
 ) where
 
 import Prelude
-import Data.String (uncons)
+import Data.String (uncons, stripPrefix)
 import Data.Maybe (Maybe(Just, Nothing))
 
 data Expr
@@ -12,7 +12,9 @@ data Expr
 
 eval :: Expr -> String -> Prim.Boolean
 eval (Equal x) y        = x == y
-eval (Prefix xxs) yys   = xxs `isPrefixOf` yys
+eval (Prefix xxs) yys   = case stripPrefix xxs yys of
+                            Just _  -> true
+                            Nothing -> false
 
 isPrefixOf :: String -> String -> Prim.Boolean
 isPrefixOf xxs yys =
