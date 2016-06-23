@@ -19,6 +19,8 @@ main = runTest do
         test "equal"        $ is   $ eval (Equal "abc") "abc"
         test "!equal"       $ aint $ eval (Equal "abc") "def"
         test "prefix long"  $ is   $ eval (Prefix "abc") "abcde"
+        test "or"           $ is   $
+                              eval ((Prefix "abc") `Or` (Equal "xyz")) "abcde"
     suite "isPrefixOf" do
         test "prefix nothin"$ is   $    "" `isPrefixOf`  ""
         test "prefix short" $ aint $ "abc" `isPrefixOf`  "ab"
