@@ -19,6 +19,6 @@ isPrefixOf xxs yys =
     case uncons xxs, uncons yys of
         Nothing, _       -> true
         _,       Nothing -> false
-        Just { head:x, tail:xs }, Just { head:y, tail:ys } ->
-            if  x /= y  then false
-                        else isPrefixOf xs ys
+        Just { head:x, tail:xs }, Just { head:y, tail:ys }
+            | x /= y    -> false
+            | otherwise -> isPrefixOf xs ys
