@@ -9,6 +9,8 @@ import Test.Unit.Console (TESTOUTPUT)
 import Test.Unit (suite, test)
 import Test.Unit.Assert as Assert
 
+import Data.Maybe
+
 import Main (makeGreeting)
 
 main :: forall t1.
@@ -21,5 +23,7 @@ main = runTest
          do Assert.equal (2 + 2) 4
             Assert.expectFailure "2 + 2 shouldn't be 5" $ Assert.equal (2 + 2) 5
     suite "Main"
-     do test "greeting"
-         do Assert.equal "Hello, sailor!" $ makeGreeting "sailor"
+     do test "greeting someone"
+         do Assert.equal "Hello, sailor!" $ makeGreeting (Just "sailor")
+        test "greeting a stranger"
+         do Assert.equal "Hello, friend!" $ makeGreeting (Nothing)
