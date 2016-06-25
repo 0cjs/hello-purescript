@@ -12,7 +12,7 @@ data Expr
     | Prefix String
     | Or Expr Expr
 
-infix 3 Or as .|
+infix 2 Or as .|
 
 eval :: Expr -> String -> Prim.Boolean
 eval (Equal x) y        = x == y
