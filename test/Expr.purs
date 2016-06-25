@@ -12,6 +12,10 @@ import Test.Unit.Assert as Assert
 
 import Expr
 
+
+testExpr :: Expr
+testExpr = Equal "foo" .| Prefix "bar"
+
 main :: forall t1.
     Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) P.Unit
 main = runTest do
@@ -21,6 +25,10 @@ main = runTest do
         test "prefix long"  $ is   $ eval (Prefix "abc") "abcde"
         test "or"           $ is   $
                               eval ((Prefix "abc") .| (Equal "xyz")) "abcde"
+    suite "textExpr" do
+        test "nothing"      $ aint $ eval testExpr "nothing"
+        test "foo"          $ is   $ eval testExpr "foo"
+        test "barbam"       $ is   $ eval testExpr "barbam"
     suite "isPrefixOf" do
         test "prefix nothin"$ is   $    "" `isPrefixOf`  ""
         test "prefix short" $ aint $ "abc" `isPrefixOf`  "ab"
