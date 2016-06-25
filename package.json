@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "pulp test"
+    "test": "pulp test -m Test.Expr"
   },
   "repository": {
     "type": "git",
