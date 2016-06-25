@@ -1,5 +1,5 @@
 module Expr (
-    Expr(..), (||),
+    Environment, Expr(..), (||),
     eval, isPrefixOf
 ) where
 
@@ -8,18 +8,27 @@ import Prelude (otherwise)
 import Data.String as S
 import Data.Maybe (Maybe(Just, Nothing))
 
+
+data Environment
+
+readEnv :: Environment -> String -> String
+readEnv e name = "XXX"
+
+
 data Expr
     = Equal String
     | Prefix String
     | Or Expr Expr
 
+
 infix 2 Or as ||
 
-eval :: Expr -> String -> Prim.Boolean
-eval (Equal x) y        = P.(==) x y
-eval (Prefix xxs) yys   = case S.stripPrefix xxs yys of
+eval :: Expr -> Environment -> Prim.Boolean
+eval (Equal x) env      = P.(==) x (readEnv env "x")
+eval (Prefix xxs) env   = case S.stripPrefix xxs yys of
                             Just _  -> true
                             Nothing -> false
+    where yys = readEnv env "x"
 eval (e1 || e2) s      = P.(||) (eval e1 s) (eval e2 s)
 
 isPrefixOf :: String -> String -> Prim.Boolean

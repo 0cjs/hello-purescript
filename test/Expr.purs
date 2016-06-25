@@ -20,15 +20,18 @@ main :: forall t1.
     Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) P.Unit
 main = runTest do
     suite "eval" do
-        test "equal"        $ is   $ eval (Equal "abc") "abc"
-        test "!equal"       $ aint $ eval (Equal "abc") "def"
-        test "prefix long"  $ is   $ eval (Prefix "abc") "abcde"
+        test "equal"        $ is   $ eval (Equal "abc") { x:"abc" }
+        test "!equal"       $ aint $ eval (Equal "abc") { x:"def" }
+        test "prefix long"  $ is   $ eval (Prefix "abc") { x:"abcde" }
+{-
         test "or"           $ is   $
-                              eval ((Prefix "abc") || (Equal "xyz")) "abcde"
+                              eval ((Prefix "abc") \
+                                || (Equal "xyz")) { x:"abcde" }
+-}
     suite "textExpr" do
-        test "nothing"      $ aint $ eval testExpr "nothing"
-        test "foo"          $ is   $ eval testExpr "foo"
-        test "barbam"       $ is   $ eval testExpr "barbam"
+        test "nothing"      $ aint $ eval testExpr  { x:"nothing" }
+        test "foo"          $ is   $ eval testExpr  { x:"foo" }
+        test "barbam"       $ is   $ eval testExpr  { x:"barbam" }
     suite "isPrefixOf" do
         test "prefix nothin"$ is   $    "" `isPrefixOf`  ""
         test "prefix short" $ aint $ "abc" `isPrefixOf`  "ab"
