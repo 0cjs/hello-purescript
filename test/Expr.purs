@@ -14,7 +14,7 @@ import Expr
 
 
 testExpr :: Expr
-testExpr = Equal "foo" .| Prefix "bar"
+testExpr = Equal "foo" || Prefix "bar"
 
 main :: forall t1.
     Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) P.Unit
@@ -24,7 +24,7 @@ main = runTest do
         test "!equal"       $ aint $ eval (Equal "abc") "def"
         test "prefix long"  $ is   $ eval (Prefix "abc") "abcde"
         test "or"           $ is   $
-                              eval ((Prefix "abc") .| (Equal "xyz")) "abcde"
+                              eval ((Prefix "abc") || (Equal "xyz")) "abcde"
     suite "textExpr" do
         test "nothing"      $ aint $ eval testExpr "nothing"
         test "foo"          $ is   $ eval testExpr "foo"
