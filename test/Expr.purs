@@ -2,6 +2,7 @@ module Test.Expr where
 
 import Prelude (($), bind)
 import Prelude as P
+import Control.Monad.Aff (Aff)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE)
 
@@ -11,6 +12,12 @@ import Test.Unit (suite, test)
 import Test.Unit.Assert as Assert
 
 import Expr
+
+
+is      :: forall t1. Boolean -> Aff t1 P.Unit
+is       = Assert.equal true
+aint    :: forall t1. Boolean -> Aff t1 P.Unit
+aint     = Assert.equal false
 
 
 testExpr :: String -> Expr
@@ -35,6 +42,3 @@ main = runTest do
         test "prefix equal" $ is   $ "abc" `isPrefixOf`  "abc"
         test "prefix long"  $ is   $ "abc" `isPrefixOf`  "abcde"
         test "prefix wrong" $ aint $ "abx" `isPrefixOf`  "abcde"
-    where
-        is   = Assert.equal true
-        aint = Assert.equal false
