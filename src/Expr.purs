@@ -5,7 +5,7 @@ module Expr (
 ) where
 
 import Prelude as P
-import Prelude (otherwise)
+import Prelude (($), otherwise)
 import Data.String as S
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.Map as M
@@ -38,15 +38,18 @@ infix 2 Or as ||
 ----------------------------------------------------------------------
 -- Evaluation
 
-eval :: Environment -> Expr -> Prim.Boolean
-eval _ False            = false
-eval _ True             = true
-eval e (Not x)          = P.not (eval e x)
-eval e (x == y)         = P.(==) (devalue e x) (devalue e y)
-eval e (Prefix xxs yys) = case S.stripPrefix (devalue e xxs) (devalue e yys) of
-                               Just _  -> true
-                               Nothing -> false
-eval e (x || y)         = P.(||) (eval e x) (eval e y)
+eval :: Environment -> Expr -> Maybe Prim.Boolean
+eval _ False            = Just $ false
+eval _ True             = Just $ true
+eval e (Not x)          = case (eval e x) of
+                              Nothing    -> Nothing
+                              Just y     -> Just y
+eval e (x == y)         = Just $ P.(==) (devalue e x) (devalue e y)
+eval e (Prefix xxs yys) = Just $ case S.stripPrefix
+                                         (devalue e xxs) (devalue e yys) of
+                                     Just _  -> true
+                                     Nothing -> false
+eval e (x || y)         = Just $ P.(||) (eval e x) (eval e y)
 
 ----------------------------------------------------------------------
 -- Utilities
