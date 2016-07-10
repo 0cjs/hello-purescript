@@ -1,5 +1,6 @@
 module Expr (
-    Value(..), Expr(..), (==), (||),
+    Environment, empty, Value(..),
+    Expr(..), (==), (||),
     eval, isPrefixOf
 ) where
 
@@ -7,14 +8,20 @@ import Prelude as P
 import Prelude (otherwise)
 import Data.String as S
 import Data.Maybe (Maybe(Just, Nothing))
+import Data.Map as M
 
 ----------------------------------------------------------------------
 -- Values
 
+type Environment = M.Map String String
+
+empty :: Environment
+empty = M.empty
+
 data Value = Const String
 
-devalue :: Value -> String
-devalue (Const x) = x
+devalue :: Environment -> Value -> String
+devalue _ (Const x) = x
 
 ----------------------------------------------------------------------
 -- Expressions
@@ -31,15 +38,15 @@ infix 2 Or as ||
 ----------------------------------------------------------------------
 -- Evaluation
 
-eval :: Expr -> Prim.Boolean
-eval False              = false
-eval True               = true
-eval (Not x)            = P.not (eval x)
-eval (x == y)           = P.(==) (devalue x) (devalue y)
-eval (Prefix xxs yys)   = case S.stripPrefix (devalue xxs) (devalue yys) of
-                            Just _  -> true
-                            Nothing -> false
-eval (e1 || e2)        = P.(||) (eval e1) (eval e2)
+eval :: Environment -> Expr -> Prim.Boolean
+eval _ False            = false
+eval _ True             = true
+eval e (Not x)          = P.not (eval e x)
+eval e (x == y)         = P.(==) (devalue e x) (devalue e y)
+eval e (Prefix xxs yys) = case S.stripPrefix (devalue e xxs) (devalue e yys) of
+                               Just _  -> true
+                               Nothing -> false
+eval e (x || y)         = P.(||) (eval e x) (eval e y)
 
 ----------------------------------------------------------------------
 -- Utilities

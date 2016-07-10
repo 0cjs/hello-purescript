@@ -8,6 +8,7 @@
   ],
   "dependencies": {
     "purescript-console": "^1.0.0",
+    "purescript-maps": "^1.1.0",
     "purescript-maybe": "^1.0.0",
     "purescript-strings": "^1.0.0",
     "purescript-test-unit": "^7.0.0"

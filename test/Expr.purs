@@ -34,15 +34,15 @@ main :: forall t1.
     Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) P.Unit
 main = runTest do
     suite "eval" do
-        test "equal"        $ is   $ eval (abc == abc)
-        test "!equal"       $ aint $ eval (abc == def)
-        test "prefix long"  $ is   $ eval (Prefix abc abcde)
-        test "or"           $ is   $ eval ((Prefix abc abcde)
-                                            || (xyz == abcde))
+        test "equal"        $ is   $ eval empty (abc == abc)
+        test "!equal"       $ aint $ eval empty (abc == def)
+        test "prefix long"  $ is   $ eval empty (Prefix abc abcde)
+        test "or"           $ is   $ eval empty
+                                        ((Prefix abc abcde) || (xyz == abcde))
     suite "textExpr" do
-        test "nothing"      $ aint $ eval (testExpr "nothing")
-        test "foo"          $ is   $ eval (testExpr "foo")
-        test "barbam"       $ is   $ eval (testExpr "barbam")
+        test "nothing"      $ aint $ eval empty (testExpr "nothing")
+        test "foo"          $ is   $ eval empty (testExpr "foo")
+        test "barbam"       $ is   $ eval empty (testExpr "barbam")
     suiteIsPrefixOf
     where
         abc     = Const "abc"
