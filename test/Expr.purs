@@ -5,20 +5,27 @@ import Prelude as P
 import Control.Monad.Aff (Aff)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE)
+import Control.Monad.Free (Free)
 
 import Test.Unit.Main (runTest)
 import Test.Unit.Console (TESTOUTPUT)
-import Test.Unit (suite, test)
+import Test.Unit (TestF, suite, test)
 import Test.Unit.Assert as Assert
 
 import Expr
 
+----------------------------------------------------------------------
+-- Test Infrastructure
+
+type TestSuite = forall t. Free (TestF t) P.Unit
 
 is      :: forall t1. Boolean -> Aff t1 P.Unit
 is       = Assert.equal true
 aint    :: forall t1. Boolean -> Aff t1 P.Unit
 aint     = Assert.equal false
 
+----------------------------------------------------------------------
+-- Tests, I guess
 
 testExpr :: String -> Expr
 testExpr s = Equal "foo" s || Prefix "bar" s
@@ -36,7 +43,10 @@ main = runTest do
         test "nothing"      $ aint $ eval (testExpr "nothing")
         test "foo"          $ is   $ eval (testExpr "foo")
         test "barbam"       $ is   $ eval (testExpr "barbam")
-    suite "isPrefixOf" do
+    suiteIsPrefixOf
+
+suiteIsPrefixOf :: TestSuite
+suiteIsPrefixOf = suite "isPrefixOf" do
         test "prefix nothin"$ is   $    "" `isPrefixOf`  ""
         test "prefix short" $ aint $ "abc" `isPrefixOf`  "ab"
         test "prefix equal" $ is   $ "abc" `isPrefixOf`  "abc"
