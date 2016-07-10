@@ -9,7 +9,8 @@ import Data.String as S
 import Data.Maybe (Maybe(Just, Nothing))
 
 data Expr
-    = Equal String String
+    = False | True | Not Expr
+    | Equal String String
     | Prefix String String
     | Or Expr Expr
 
@@ -17,6 +18,9 @@ infix 4 Equal as ==
 infix 2 Or as ||
 
 eval :: Expr -> Prim.Boolean
+eval False              = false
+eval True               = true
+eval (Not x)            = P.not (eval x)
 eval (x == y)           = P.(==) x y
 eval (Prefix xxs yys)   = case S.stripPrefix xxs yys of
                             Just _  -> true
