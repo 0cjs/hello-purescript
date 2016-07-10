@@ -9,18 +9,18 @@ import Data.String as S
 import Data.Maybe (Maybe(Just, Nothing))
 
 data Expr
-    = Equal String
-    | Prefix String
+    = Equal String String
+    | Prefix String String
     | Or Expr Expr
 
 infix 2 Or as ||
 
-eval :: Expr -> String -> Prim.Boolean
-eval (Equal x) y        = P.(==) x y
-eval (Prefix xxs) yys   = case S.stripPrefix xxs yys of
+eval :: Expr -> Prim.Boolean
+eval (Equal x y)        = P.(==) x y
+eval (Prefix xxs yys)   = case S.stripPrefix xxs yys of
                             Just _  -> true
                             Nothing -> false
-eval (e1 || e2) s      = P.(||) (eval e1 s) (eval e2 s)
+eval (e1 || e2)        = P.(||) (eval e1) (eval e2)
 
 isPrefixOf :: String -> String -> Prim.Boolean
 isPrefixOf xxs yys =
