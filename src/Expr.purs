@@ -1,5 +1,5 @@
 module Expr (
-    Expr(..), (||),
+    Expr(..), (==), (||),
     eval, isPrefixOf
 ) where
 
@@ -13,10 +13,11 @@ data Expr
     | Prefix String String
     | Or Expr Expr
 
+infix 4 Equal as ==
 infix 2 Or as ||
 
 eval :: Expr -> Prim.Boolean
-eval (Equal x y)        = P.(==) x y
+eval (x == y)           = P.(==) x y
 eval (Prefix xxs yys)   = case S.stripPrefix xxs yys of
                             Just _  -> true
                             Nothing -> false
