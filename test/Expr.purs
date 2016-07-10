@@ -28,22 +28,27 @@ aint     = Assert.equal false
 -- Tests, I guess
 
 testExpr :: String -> Expr
-testExpr s = Equal "foo" s || Prefix "bar" s
+testExpr s = Equal (Const "foo") (Const s) || Prefix (Const "bar") (Const s)
 
 main :: forall t1.
     Eff (console :: CONSOLE, testOutput :: TESTOUTPUT | t1) P.Unit
 main = runTest do
     suite "eval" do
-        test "equal"        $ is   $ eval ("abc" == "abc")
-        test "!equal"       $ aint $ eval ("abc" == "def")
-        test "prefix long"  $ is   $ eval (Prefix "abc" "abcde")
-        test "or"           $ is   $ eval ((Prefix "abc" "abcde")
-                                            || ("xyz" == "abcde"))
+        test "equal"        $ is   $ eval (abc == abc)
+        test "!equal"       $ aint $ eval (abc == def)
+        test "prefix long"  $ is   $ eval (Prefix abc abcde)
+        test "or"           $ is   $ eval ((Prefix abc abcde)
+                                            || (xyz == abcde))
     suite "textExpr" do
         test "nothing"      $ aint $ eval (testExpr "nothing")
         test "foo"          $ is   $ eval (testExpr "foo")
         test "barbam"       $ is   $ eval (testExpr "barbam")
     suiteIsPrefixOf
+    where
+        abc     = Const "abc"
+        def     = Const "def"
+        abcde   = Const "abcde"
+        xyz     = Const "xyz"
 
 suiteIsPrefixOf :: TestSuite
 suiteIsPrefixOf = suite "isPrefixOf" do
